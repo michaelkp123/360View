@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "360-view-overview"
+client_id = "0e682b49317b9fa758ad804d73277211"
+application_url = "https://bufing-coding-commissioner-ist.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://bufing-coding-commissioner-ist.trycloudflare.com/auth/callback",
+  "https://bufing-coding-commissioner-ist.trycloudflare.com/auth/shopify/callback",
+  "https://bufing-coding-commissioner-ist.trycloudflare.com/api/auth/callback",
+  "https://bufing-coding-commissioner-ist.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "test-store-for-360-image.myshopify.com"
