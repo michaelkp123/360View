@@ -2,7 +2,7 @@
 
 name = "360-view-overview"
 client_id = "0e682b49317b9fa758ad804d73277211"
-application_url = "https://bufing-coding-commissioner-ist.trycloudflare.com"
+application_url = "https://prix-andy-vitamins-platforms.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://bufing-coding-commissioner-ist.trycloudflare.com/auth/callback",
-  "https://bufing-coding-commissioner-ist.trycloudflare.com/auth/shopify/callback",
-  "https://bufing-coding-commissioner-ist.trycloudflare.com/api/auth/callback",
-  "https://bufing-coding-commissioner-ist.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://prix-andy-vitamins-platforms.trycloudflare.com/auth/callback",
+  "https://prix-andy-vitamins-platforms.trycloudflare.com/auth/shopify/callback",
+  "https://prix-andy-vitamins-platforms.trycloudflare.com/api/auth/callback",
+  "https://prix-andy-vitamins-platforms.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
