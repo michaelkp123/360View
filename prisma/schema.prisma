@@ -28,5 +28,6 @@ model Image360 {
   productId        String
   productHandle    String
   iframeName       String
+  isOnline         Boolean   @default(false) // Set a default value if necessary
   createdAt        DateTime @default(now())
 }

@@ -1,53 +1,63 @@
 import { useLoaderData, Form } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
 import svg from "../../public/SvgIntro.svg";
-import { LegacyCard, EmptyState, Page } from "@shopify/polaris";
+import { redirect } from '@remix-run/node';
 import { PrismaClient } from "@prisma/client";
-import { 
-  redirect
-} from '@remix-run/node';
-import indexStyles from "../../public/style.css";
-
-export const links = () => [{ rel: "stylesheet", href: indexStyles }];
+import { authenticate } from "../shopify.server";
+import { LegacyCard, EmptyState, Page } from "@shopify/polaris";
 
 export const loader = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const productId = new URL(request.url).searchParams.get('productId');
-
-  
-  const prisma = new PrismaClient();
-
-  const existingImages = await prisma.image360.findMany({
-    where: {
-      productId: productId,
-    },
-  });
-
-  if (existingImages.length > 0) {
-    // Records with the same productId exist, redirect accordingly
-    return redirect(`/app/activate?productId=${productId}`);
-  }
-
-  const response = await admin.graphql(
-    `#graphql
-      query {
+    const productId = new URL(request.url).searchParams.get('productId');
+    const prisma = new PrismaClient();
+    const { admin } = await authenticate.admin(request);
+    
+    const response = await admin.graphql(
+      `#graphql
+        query {
           product(id: "${productId}") {
-              id
-              title
-              handle
+            descriptionHtml
+            id
+            title
+            handle
           }
-      }`,
-  );
+        }`,
+    );
+    
+    const responseJson = await response.json();
+    
+    let productDescription = responseJson.data.product.descriptionHtml;
+  
+    // Use a regular expression to remove the entire iframe tag
+    productDescription = productDescription.replace(/<iframe[\s\S]*?<\/iframe>/gi, '');
 
-  const responseJson = await response.json();
 
-  return responseJson;
+    
+  await admin.graphql(
+    `mutation {
+      productUpdate(input: {
+        id: "${productId}",
+        descriptionHtml: "${productDescription}"
+      }) {
+        product {
+          id
+          title
+        }
+      }
+    }`
+    );
+    
+    await prisma.image360.deleteMany({
+        where: {
+          productId: productId,
+        },
+      });
+  
+      return responseJson;
 };
-
 
 export const action = async ({ request }) => {
   const prisma = new PrismaClient();
   const form = await request.formData();
+  const productId = form.get("productId");
 
   // Get the iframe string from the form data
   const iframe = form.get("iframe");
@@ -58,25 +68,23 @@ export const action = async ({ request }) => {
   const createImg = await prisma.image360.create({
     data: {
       title: form.get("Title"),
-      productId: form.get("productId"),
+      productId: productId,
       productHandle: form.get("productHandle"),
       iframeName: modifiedIframe
     }
   });
 
-  return createImg; // Return the newly created record
+  return redirect(`/app/activate?productId=${productId}`);
 }
-
-
-
-export default function AddPicture() {
+  
+export default function UpdateIframe() {
   const loaderData = useLoaderData();
   const productTitle = loaderData.data.product.title;
   const productId = loaderData.data.product.id;
   const productHandle = loaderData.data.product.handle;
 
   return (
-    <Page backAction={{ content: 'Products', url: '/app' }} title={productTitle}>
+    <Page title={productTitle}>
       <LegacyCard sectioned>
         <EmptyState>
           <img src={svg} alt={productTitle} height={350} width={350} />
@@ -89,7 +97,7 @@ export default function AddPicture() {
           <input type="text" name="productHandle" value={productHandle} hidden readOnly />
           <input type="text" name="iframe" style={{ width: '300px' }}/>
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-              <button class="SaveButton" type="submit">Save</button>
+              <button type="submit">Save</button>
               </div>
           </Form>
         </EmptyState>
