@@ -26,12 +26,11 @@ export const loader = async ({ request }) => {
   const response = await admin.graphql(
     `#graphql
       query {
-        products(first: 100, reverse: false) {
+        products(first: 100, reverse: true) {
           edges {
             node {
               id
               title
-              handle
               images(first: 1) {
                 nodes {
                   id

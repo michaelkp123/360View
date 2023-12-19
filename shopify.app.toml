@@ -2,7 +2,7 @@
 
 name = "360-view-overview"
 client_id = "0e682b49317b9fa758ad804d73277211"
-application_url = "https://promoting-florida-garlic-http.trycloudflare.com"
+application_url = "https://sagem-rec-contained-talent.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://promoting-florida-garlic-http.trycloudflare.com/auth/callback",
-  "https://promoting-florida-garlic-http.trycloudflare.com/auth/shopify/callback",
-  "https://promoting-florida-garlic-http.trycloudflare.com/api/auth/callback",
-  "https://promoting-florida-garlic-http.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://sagem-rec-contained-talent.trycloudflare.com/auth/callback",
+  "https://sagem-rec-contained-talent.trycloudflare.com/auth/shopify/callback",
+  "https://sagem-rec-contained-talent.trycloudflare.com/api/auth/callback",
+  "https://sagem-rec-contained-talent.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
